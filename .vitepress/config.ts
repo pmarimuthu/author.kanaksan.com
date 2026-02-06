@@ -5,6 +5,7 @@ export default defineConfig({
   description:
     "About Marimuthu Periyannan, a Lead Product Engineer with 19+ years of experience building enterprise-grade Java systems in banking, aerospace, and beyond.",
   lang: "en-IN",
+  base: '/',   // REQUIRED for author.kanaksan.com
   cleanUrls: true,
 
   head: [
