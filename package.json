@@ -1,0 +1,19 @@
+{
+  "name": "author.kanaksan.com",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vitepress dev",
+    "build": "vitepress build",
+    "preview": "vitepress preview"
+  },
+  "keywords": [],
+  "author": "Marimuthu Periyannan",
+  "license": "ISC",
+  "description": "Portfolio site for Marimuthu Periyannan — author.kanaksan.com",
+  "devDependencies": {
+    "vitepress": "^1.6.4",
+    "vue": "^3.5.27"
+  }
+}
