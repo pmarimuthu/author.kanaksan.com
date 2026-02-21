@@ -2,7 +2,7 @@
 layout: home
 hero:
   name: Marimuthu Periyannan
-  tagline: Building enterprise software with Java for over 21 years — still coding, still enjoying it.
+  tagline: building enterprise applications ...
   actions:
     - theme: brand
       text: About Me
@@ -12,7 +12,7 @@ hero:
       link: /works/
     - theme: alt
       text: Download Resume
-      link: /resume.pdf
+      link: /resume-download
 
 features:
   - icon: ✍️
