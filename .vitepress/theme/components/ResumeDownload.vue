@@ -1,89 +1,107 @@
 <script setup>
-import { ref, onMounted, onUnmounted } from 'vue'
-import { useRouter } from 'vitepress'
+import { ref, onMounted, onUnmounted } from "vue";
+import { useRouter } from "vitepress";
 
-const router = useRouter()
-const showModal = ref(false)
-const inputValue = ref('')
-const error = ref('')
+const router = useRouter();
+const showModal = ref(false);
+const inputValue = ref("");
+const error = ref("");
+
+// Load PDF as base64 at build time
+const resumeBase64 = __RESUME_BASE64__;
 
 const allowedHashes = [
-  '0938bd39c0824d02abe1645dcadc40d968b5e278be1b2671aca56614f946edd4',
-  '588551eff948145f912b5aaa145e72a246a7a061dbb1ab281e701d1a4729396a'
-]
+  "0938bd39c0824d02abe1645dcadc40d968b5e278be1b2671aca56614f946edd4",
+  "588551eff948145f912b5aaa145e72a246a7a061dbb1ab281e701d1a4729396a",
+];
 
 async function sha256(message) {
-  const msgBuffer = new TextEncoder().encode(message.trim().toLowerCase())
-  const hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer)
-  const hashArray = Array.from(new Uint8Array(hashBuffer))
-  return hashArray.map(b => b.toString(16).padStart(2, '0')).join('')
+  const msgBuffer = new TextEncoder().encode(message.trim().toLowerCase());
+  const hashBuffer = await crypto.subtle.digest("SHA-256", msgBuffer);
+  const hashArray = Array.from(new Uint8Array(hashBuffer));
+  return hashArray.map((b) => b.toString(16).padStart(2, "0")).join("");
 }
 
 function openModal() {
-  inputValue.value = ''
-  error.value = ''
-  showModal.value = true
+  inputValue.value = "";
+  error.value = "";
+  showModal.value = true;
 }
 
 function closeModal() {
-  showModal.value = false
+  showModal.value = false;
 }
 
 async function verify() {
-  const hash = await sha256(inputValue.value)
+  const hash = await sha256(inputValue.value);
   if (allowedHashes.includes(hash)) {
-    showModal.value = false
-    const link = document.createElement('a')
-    link.href = '/resume.pdf'
-    link.download = 'Marimuthu_Periyannan_Resume.pdf'
-    document.body.appendChild(link)
-    link.click()
-    document.body.removeChild(link)
+    showModal.value = false;
+
+    // Decode base64 and trigger download
+    const byteCharacters = atob(resumeBase64);
+    const byteNumbers = new Array(byteCharacters.length);
+    for (let i = 0; i < byteCharacters.length; i++) {
+      byteNumbers[i] = byteCharacters.charCodeAt(i);
+    }
+    const byteArray = new Uint8Array(byteNumbers);
+    const blob = new Blob([byteArray], { type: "application/pdf" });
+    const url = URL.createObjectURL(blob);
+
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = "Marimuthu_Periyannan_Resume.pdf";
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
   } else {
-    error.value = 'Verification failed. Please check and try again.'
+    error.value = "Verification failed. Please check and try again.";
   }
 }
 
 function handleKeydown(e) {
-  if (e.key === 'Enter') verify()
-  if (e.key === 'Escape') closeModal()
+  if (e.key === "Enter") verify();
+  if (e.key === "Escape") closeModal();
 }
 
-// Block VitePress router from navigating to /resume-download
 router.onBeforeRouteChange = (to) => {
-  if (to === '/resume-download' || to === '/resume-download.html') {
-    openModal()
-    return false  // prevent navigation
+  if (to === "/resume-download" || to === "/resume-download.html") {
+    openModal();
+    return false;
   }
-  return true
-}
+  return true;
+};
 
-// Also intercept the click to prevent any flash
 function interceptResumeClick(e) {
-  const anchor = e.target.closest('a')
-  if (anchor && anchor.getAttribute('href') === '/resume-download') {
-    e.preventDefault()
-    e.stopPropagation()
-    openModal()
+  const anchor = e.target.closest("a");
+  if (anchor && anchor.getAttribute("href") === "/resume-download") {
+    e.preventDefault();
+    e.stopPropagation();
+    openModal();
   }
 }
 
 onMounted(() => {
-  document.addEventListener('click', interceptResumeClick, true)
-})
+  document.addEventListener("click", interceptResumeClick, true);
+});
 
 onUnmounted(() => {
-  document.removeEventListener('click', interceptResumeClick, true)
-})
+  document.removeEventListener("click", interceptResumeClick, true);
+});
 </script>
 
 <template>
   <Teleport v-if="showModal" to="body">
     <div class="modal-overlay" @click.self="closeModal">
       <div class="modal-content" @keydown="handleKeydown">
-        <button class="modal-close" @click="closeModal" aria-label="Close">&times;</button>
+        <button class="modal-close" @click="closeModal" aria-label="Close">
+          &times;
+        </button>
         <h3>Verify to Download</h3>
-        <p>Please enter Marimuthu's email address or phone number to download the resume.</p>
+        <p>
+          Please enter Marimuthu's email address or phone number to download the
+          resume.
+        </p>
         <input
           v-model="inputValue"
           type="text"
@@ -93,7 +111,9 @@ onUnmounted(() => {
         />
         <p v-if="error" class="modal-error">{{ error }}</p>
         <div class="modal-actions">
-          <button class="modal-verify-btn" @click="verify">Verify & Download</button>
+          <button class="modal-verify-btn" @click="verify">
+            Verify & Download
+          </button>
           <button class="modal-cancel-btn" @click="closeModal">Cancel</button>
         </div>
       </div>

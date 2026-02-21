@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "private": true,
   "type": "module",
-   "scripts": {
+  "scripts": {
     "docs:dev": "vitepress dev",
     "docs:build": "vitepress build",
     "docs:preview": "vitepress preview"
@@ -13,6 +13,7 @@
   "license": "ISC",
   "description": "Portfolio site for Marimuthu Periyannan — author.kanaksan.com",
   "devDependencies": {
+    "@types/node": "^25.3.0",
     "vitepress": "^1.6.4",
     "vue": "^3.5.27"
   }
