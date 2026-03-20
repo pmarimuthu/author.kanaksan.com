@@ -2,7 +2,7 @@
 layout: home
 hero:
   name: Marimuthu Periyannan
-  tagline: building enterprise applications ...
+  tagline: building kanaksan ...
   actions:
     - theme: brand
       text: About Me
