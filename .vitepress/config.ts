@@ -52,15 +52,6 @@ export default defineConfig({
       { text: 'Blog', link: '/blog/' },
     ],
 
-    socialLinks: [
-      { icon: 'github', link: 'https://github.com/pmarimuthu' },
-      { icon: 'linkedin', link: 'https://linkedin.com/in/marisp' },
-    ],
-
-    footer: {
-      copyright: `© ${new Date().getFullYear()} <a href="https://kanaksan.com">Kanaksan.com</a>`,
-    },
-
     search: {
       provider: 'local',
     },
@@ -70,5 +61,18 @@ export default defineConfig({
     define: {
       __RESUME_BASE64__: JSON.stringify(resumeBase64),
     },
+  },
+
+  transformHead() {
+    return [
+      [
+        'script',
+        {
+          src: 'https://pulse.kanaksan.com/tracker.js',
+          'data-app': 'author.kanaksan.com',
+          defer: 'true',
+        },
+      ],
+    ]
   },
 })

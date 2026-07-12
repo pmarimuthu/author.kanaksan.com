@@ -1,26 +1,24 @@
-import { h } from 'vue'
-import type { Theme } from 'vitepress';
-import DefaultTheme from 'vitepress/theme';
+import DefaultTheme from 'vitepress/theme'
+import type { Theme } from 'vitepress'
+import './custom.css'
 
-import Timeline from './components/Timeline.vue';
-import ProjectCard from './components/ProjectCard.vue';
-import SkillGrid from './components/SkillGrid.vue';
-import KanaksanEcosystem from './components/KanaksanEcosystem.vue';
+import Layout from './Layout.vue'
 
-import './custom.css';
-import ResumeDownload from './components/ResumeDownload.vue';
+// Existing components
+import KanaksanEcosystem from './components/KanaksanEcosystem.vue'
+import ProjectCard        from './components/ProjectCard.vue'
+import ResumeDownload     from './components/ResumeDownload.vue'
+import SkillGrid          from './components/SkillGrid.vue'
+import Timeline           from './components/Timeline.vue'
 
 export default {
   extends: DefaultTheme,
-  Layout() {
-    return h(DefaultTheme.Layout, null, {
-      'layout-bottom': () => h(ResumeDownload)
-    })
-  },
+  Layout,
   enhanceApp({ app }) {
-    app.component('Timeline', Timeline);
-    app.component('ProjectCard', ProjectCard);
-    app.component('SkillGrid', SkillGrid);
-    app.component('KanaksanEcosystem', KanaksanEcosystem);
+    app.component('KanaksanEcosystem', KanaksanEcosystem)
+    app.component('ProjectCard',        ProjectCard)
+    app.component('ResumeDownload',     ResumeDownload)
+    app.component('SkillGrid',          SkillGrid)
+    app.component('Timeline',           Timeline)
   },
-} satisfies Theme;
+} satisfies Theme

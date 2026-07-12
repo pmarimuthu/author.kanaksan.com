@@ -3,6 +3,14 @@ import { ref, onMounted, onUnmounted } from "vue";
 import { useRouter } from "vitepress";
 
 const router = useRouter();
+
+const props = defineProps({
+  autoOpen: {
+    type: Boolean,
+    default: false,
+  },
+});
+
 const showModal = ref(false);
 const inputValue = ref("");
 const error = ref("");
@@ -30,6 +38,9 @@ function openModal() {
 
 function closeModal() {
   showModal.value = false;
+  if (window.location.pathname === '/resume-download') {
+    router.go('/')
+  }
 }
 
 async function verify() {
@@ -37,7 +48,6 @@ async function verify() {
   if (allowedHashes.includes(hash)) {
     showModal.value = false;
 
-    // Decode base64 and trigger download
     const byteCharacters = atob(resumeBase64);
     const byteNumbers = new Array(byteCharacters.length);
     for (let i = 0; i < byteCharacters.length; i++) {
@@ -54,6 +64,9 @@ async function verify() {
     link.click();
     document.body.removeChild(link);
     URL.revokeObjectURL(url);
+    if (window.location.pathname === '/resume-download') {
+      router.go('/')
+    }
   } else {
     error.value = "Verification failed. Please check and try again.";
   }
@@ -63,14 +76,6 @@ function handleKeydown(e) {
   if (e.key === "Enter") verify();
   if (e.key === "Escape") closeModal();
 }
-
-router.onBeforeRouteChange = (to) => {
-  if (to === "/resume-download" || to === "/resume-download.html") {
-    openModal();
-    return false;
-  }
-  return true;
-};
 
 function interceptResumeClick(e) {
   const anchor = e.target.closest("a");
@@ -83,6 +88,9 @@ function interceptResumeClick(e) {
 
 onMounted(() => {
   document.addEventListener("click", interceptResumeClick, true);
+  if (props.autoOpen) {
+    openModal();
+  }
 });
 
 onUnmounted(() => {
