@@ -70,7 +70,7 @@ export default defineConfig({
         {
           src: 'https://pulse.kanaksan.com/tracker.js',
           'data-app': 'author.kanaksan.com',
-          defer: 'true',
+          defer: '',
         },
       ],
     ]
