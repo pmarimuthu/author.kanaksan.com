@@ -21,7 +21,7 @@ export default defineConfig({
   cleanUrls: true,
 
   head: [
-    ['link', { rel: 'icon', type: 'image/svg+xml', href: '/logo.svg' }],
+    ['link', { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }],
     ['link', { rel: 'canonical', href: site.url }],
 
     ['meta', { name: 'author', content: site.name }],
@@ -35,6 +35,13 @@ export default defineConfig({
     ['meta', { name: 'twitter:card', content: 'summary_large_image' }],
     ['meta', { name: 'twitter:title', content: site.title }],
     ['meta', { name: 'twitter:description', content: site.description }],
+
+    // Pulse tracker
+    ['script', {
+      src: 'https://pulse.kanaksan.com/tracker.js',
+      'data-app': 'author.kanaksan.com',
+      defer: '',
+    }],
   ],
 
   sitemap: {
@@ -61,18 +68,5 @@ export default defineConfig({
     define: {
       __RESUME_BASE64__: JSON.stringify(resumeBase64),
     },
-  },
-
-  transformHead() {
-    return [
-      [
-        'script',
-        {
-          src: 'https://pulse.kanaksan.com/tracker.js',
-          'data-app': 'author.kanaksan.com',
-          defer: '',
-        },
-      ],
-    ]
   },
 })
